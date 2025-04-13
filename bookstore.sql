@@ -14,6 +14,7 @@ CREATE TABLE book_language (
     language_code VARCHAR(8) NOT NULL UNIQUE COMMENT 'e.g., en, es, fr',
     language_name VARCHAR(50) NOT NULL UNIQUE COMMENT 'e.g., English, Spanish, French'
 );
+
 -- 5. publisher table
 CREATE TABLE publisher (
    publisher_id INT AUTO_INCREMENT PRIMARY KEY,
