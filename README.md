@@ -1,15 +1,17 @@
 # Bookstore-Database-Project
 Phase 1: Database and Table Creation
 
-    Step 1: Create a new database - Gloria
+    Step 1: Create a new database - Fredrick
     
-        -bookstoreDB
+        -bookstoredb
+
+    Step 2: Create users and grant privileges
     
-    Step 2: Determine the table schema and data types - Fredrick
+    Step 3: Determine the table schema and data types - Fredrick
     
         -Done in the CREATE TABLE statements below
   
-    Step 3: Write the SQL commands to create tables - Fredrick
+    Step 4: Write the SQL commands to create tables - Fredrick
     
         -book: A list of all books available in the store.
         
@@ -41,14 +43,11 @@ Phase 1: Database and Table Creation
         
         -order_status: A list of possible statuses for an order (e.g., pending, shipped, delivered). 
 
-Phase 2: Data Population (Sample Data) - Fredrick
+Phase 2: Data Population - Gloria
 
       -Insert sample data to test relationships and queries.
 
-Phase 3: User Groups and Roles - Gloria
 
-    Step 4: Set up user groups and roles.
-
-Phase 4: Testing with Queries - All team
+Phase 3: Testing with Queries - All members
 
     Step 5: Test the database by running queries
