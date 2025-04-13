@@ -274,3 +274,5 @@ WHERE order_id = @last_order_id;
 -- 4. Add initial order history record
 INSERT INTO order_history (order_id, status_id, status_date, notes) VALUES
 (@last_order_id, 1, NOW(), 'Order placed by customer.'); -- Status 1 = Pending
+
+-- Phase 4: TESTING
