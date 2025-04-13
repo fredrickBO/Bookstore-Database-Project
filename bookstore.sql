@@ -4,7 +4,8 @@ CREATE DATABASE IF NOT EXISTS bookstoreDB CHARACTER SET utf8mb4 COLLATE utf8mb4_
 USE bookstoreDB;
 
 -- USERS AND PRIVILEGES
-
+CREATE USER 'gloria'@'%' IDENTIFIED BY '5678';
+GRANT ALL PRIVILEGES ON bookstoredb TO 'gloria'@'%';
 
 -- CREATE TABLES
 -- 4. book_language table
