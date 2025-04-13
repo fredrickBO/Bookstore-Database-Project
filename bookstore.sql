@@ -1,5 +1,12 @@
+-- Database creation
 CREATE DATABASE IF NOT EXISTS bookstoreDB CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 USE bookstoreDB;
+
+-- USERS AND PRIVILEGES
+
+
+-- CREATE TABLES
 -- 4. book_language table
 CREATE TABLE book_language (
     language_id INT AUTO_INCREMENT PRIMARY KEY,
