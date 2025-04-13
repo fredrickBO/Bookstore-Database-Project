@@ -137,3 +137,132 @@ ALTER TABLE cust_order ADD INDEX idx_cust_order_customer (customer_id);
 ALTER TABLE cust_order ADD INDEX idx_cust_order_date (order_date);
 ALTER TABLE order_line ADD INDEX idx_order_line_book (book_id);
 
+
+
+-- PHASE TWO: DATA POPPULATION
+USE bookstoreDB;
+
+INSERT INTO book_language (language_code, language_name) 
+VALUES
+('en', 'English'),
+('es', 'Spanish'),
+('fr', 'French');
+
+INSERT INTO publisher (publisher_name) 
+VALUES
+('Longhorn Publishers'),
+('Storymoja Publishers'),
+('Phoenix Publishers'),
+('Kenya Literature Bureau'),
+('Moran Publishers');
+
+INSERT INTO author (first_name, last_name) 
+VALUES
+('Stephen', 'Oundo'),
+('Gloria’', 'Barasa'),
+('George', 'Muia'),
+('Joseph', 'Mukhwana'),
+('Jane', 'Oduor');
+
+INSERT INTO country (country_name) 
+VALUES
+('Kenya'),
+('Uganda'),
+('Canada'),
+('Tanzania');
+
+INSERT INTO address_status (status_value) 
+VALUES
+('Current'),
+('Old'),
+('Billing'),
+('Shipping');
+
+INSERT INTO shipping_method (method_name, cost) 
+VALUES
+('Standard Shipping', 5.00),
+('Express Shipping', 15.00),
+('Next Day Air', 25.00);
+
+INSERT INTO order_status (status_value) 
+VALUES
+('Pending'),          
+('Processing'),       
+('Payment Failed'),   
+('Shipped'),          
+('Delivered'),        
+('Cancelled'),        
+('Returned');        
+
+
+INSERT INTO book (title, num_pages, publication_date, price, language_id, publisher_id) 
+VALUES
+('The Shining', 688, '1977-01-28', 15.99, 1, 3), 
+('Harry Potter and the Sorcerer''s Stone', 320, '1998-09-01', 12.50, 2, 2), 
+('1984', 328, '1950-07-19', 9.95, 3, 1), 
+('Pride and Prejudice', 480, '1813-01-28', 8.50, 2, 5),
+('Anne of Green Gables', 832, '1904-2-7', 300, 1, 4),
+('The Lord of the Rings', 492, '1999-6-29', 90, 2, 5),
+('Harry Potter and the Philosophers Stone', 274, '2002-12-12', 900, 1,1),
+('A Tale of Two Cities',  295, '1984-12-12', 700, 1,4),
+('The Great Escape',  994, '2000-1-12', 900, 3,1),
+('The Alchemist', 778, '1992-12-9', 900, 1,1),
+('The Diary of a Young Girl', 500, '1978-3-2', 900, 1,2); 
+
+INSERT INTO customer(first_name, last_name, email, phone)
+VALUES('felix', 'kibet', 'kibetjyrt@example.com', 1234567890),
+('anthony', 'masai', 'tfdghkw@example.com', 2345678901),
+('faith', 'choge', 'fayfayfay@example.com', 3456789012),
+('adelight', 'lubisia', 'boardinhr@example.com', 4567890123),
+('janet', 'sitati', 'janosito@example.com', 5678901234),
+('catherine', 'muniafu', 'defchyAHBDY@example.com', 6789012345),
+('jeff', 'onyango', 'mtuwaduka@example.com', 7890123456),
+('juliet', 'nyarrasa', 'kayukutu@example.com', 8901234567),
+('mercy', 'silei', 'mercypeer@example.com', 9012345678),
+('george', 'oleSahani', 'mashakura@example.com', 0123456789);
+
+
+INSERT INTO address (street_number, street_name, city, postal_code, country_id) 
+VALUES
+('123', 'Muindi mbingu', 'Nairobi', 'MMN', 1),
+('45', 'Sore drive', 'Nakuru', 'SDN', 1),
+('10', 'Kijiji', 'Mombasa', 'KMS', 2),
+('24', 'Sana Sana', 'Eldoret', 'SSE', 3);
+
+
+INSERT INTO book_author (book_id, author_id) 
+VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4); 
+
+-- Link customers to addresses with statuses
+INSERT INTO customer_address (customer_id, address_id, status_id) 
+VALUES
+(1, 1, 1),
+(2, 2, 1), 
+(1, 3, 2);
+
+
+INSERT INTO cust_order (customer_id, order_date, dest_address_id, shipping_method_id, current_status_id) VALUES
+(1, NOW(), 1, 1, 1);
+SET @last_order_id = LAST_INSERT_ID();
+
+
+INSERT INTO order_line (order_id, book_id, quantity, price) 
+VALUES
+(@last_order_id, 1, 1, 15.99), 
+(@last_order_id, 3, 2, 9.95); 
+
+-- 3. Calculate the order total (books + shipping)
+-- This might be done by application logic, but we can do it in SQL for this example
+SET @order_books_total = (SELECT SUM(quantity * price) FROM order_line WHERE order_id = @last_order_id);
+SET @shipping_cost = (SELECT cost FROM shipping_method WHERE method_id = (SELECT shipping_method_id FROM cust_order WHERE order_id = @last_order_id));
+UPDATE cust_order
+SET order_total = @order_books_total + @shipping_cost
+WHERE order_id = @last_order_id;
+
+-- 4. Add initial order history record
+INSERT INTO order_history (order_id, status_id, status_date, notes) VALUES
+(@last_order_id, 1, NOW(), 'Order placed by customer.'); -- Status 1 = Pending
