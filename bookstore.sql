@@ -275,4 +275,25 @@ WHERE order_id = @last_order_id;
 INSERT INTO order_history (order_id, status_id, status_date, notes) VALUES
 (@last_order_id, 1, NOW(), 'Order placed by customer.'); -- Status 1 = Pending
 
--- Phase 4: TESTING
+    -- Phase 4: TESTING
+-- 1. Find all books by Stephen Oundo
+SELECT
+    b.title,
+    b.publication_date,
+    p.publisher_name
+FROM book b
+JOIN book_author ba ON b.book_id = ba.book_id
+JOIN author a ON ba.author_id = a.author_id
+JOIN publisher p ON b.publisher_id = p.publisher_id
+WHERE a.first_name = 'Stephen' AND a.last_name = 'Oundo';
+
+-- 2. Find all orders placed by Anthony Masai
+SELECT
+    co.order_id,
+    co.order_date,
+    co.order_total,
+    os.status_value AS current_status
+FROM cust_order co
+JOIN Customer c ON co.customer_id = c.customer_id
+JOIN order_status os ON co.current_status_id = os.status_id
+WHERE c.first_name = 'anthony' AND c.last_name = 'masai';
